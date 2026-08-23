@@ -73,9 +73,19 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
       );
       final launched = await launchUrl(
         Uri.parse(url),
-        mode: LaunchMode.externalApplication,
+        mode: LaunchMode.inAppBrowserView,
       );
-      if (!launched) throw Exception('Could not open Stripe Checkout.');
+      if (!launched) {
+        await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.externalApplication,
+        );
+      }
+      // When the user returns from Stripe checkout, refresh the booking state
+      await Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        await _loadBooking();
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

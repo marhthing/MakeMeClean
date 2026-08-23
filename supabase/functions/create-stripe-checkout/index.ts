@@ -107,7 +107,6 @@ Deno.serve(async (req) => {
       mode: "payment",
       client_reference_id: booking.id,
       customer_email: userData.user.email ?? undefined,
-      payment_method_types: ["card"],
       line_items: [
         {
           quantity: 1,
